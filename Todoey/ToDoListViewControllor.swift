@@ -11,9 +11,13 @@ import UIKit
 class ToDoListViewController: UITableViewController {
 
     var itemArray = ["Get big", "Pump iron", "Eat food"]
+    let defaults = UserDefaults.standard
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        if let items = UserDefaults.standard.array(forKey: "TodoListArray") as? [String] { // file that has the SAVED Array UserDefaults
+            itemArray = items
+        }
     }
 
     // MARK - Tableview Datasource Methods
@@ -48,15 +52,18 @@ class ToDoListViewController: UITableViewController {
     //MARK - Add New IBAction
     @IBAction func addItemButtonPressed(_ sender: UIBarButtonItem) {
         
-        var textField = UITextField()
+        var textField = UITextField() // using the UITextField
         
-        let alert = UIAlertController(title: "Add New Todoey Item", message: "", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Add New Todoey Item", message: "", preferredStyle: .alert) // This brings up the alert box to add the new item
         
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
             // what will happen once the user clicks the Add Item Button
-            self.itemArray.append(textField.text!)
-            self.tableView.reloadData()
-            print("New item to table view added successfully.")
+            self.itemArray.append(textField.text!) // This line will append the item towards the back of the array.
+            
+            self.defaults.set(self.itemArray, forKey: "TodoListArray")
+            
+            self.tableView.reloadData() // reloads the tableView data
+            print("New item to table view added successfully.") // check if item was added successfully
             
             
         }
